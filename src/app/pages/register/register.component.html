@@ -1,0 +1,47 @@
+<div style="padding: 20px; max-width: 400px; margin: auto;">
+  <h2>Register</h2>
+
+  <form (ngSubmit)="registerUser()" #registerForm="ngForm">
+    <div style="margin-bottom: 15px;">
+      <label for="username">Username:</label><br />
+      <input
+        id="username"
+        name="username"
+        [(ngModel)]="username"
+        required
+        class="form-control"
+      />
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label for="email">Email:</label><br />
+      <input
+        id="email"
+        name="email"
+        type="email"
+        [(ngModel)]="email"
+        required
+        class="form-control"
+      />
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label for="password">Password:</label><br />
+      <input
+        id="password"
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        required
+        class="form-control"
+      />
+    </div>
+
+    <button type="submit" [disabled]="!registerForm.form.valid">
+      Register
+    </button>
+  </form>
+
+  <p *ngIf="success" style="color: green; margin-top: 15px;">{{ success }}</p>
+  <p *ngIf="error" style="color: red; margin-top: 15px;">{{ error }}</p>
+</div>

@@ -1,0 +1,53 @@
+<div style="padding: 20px;">
+  <h2>Amazon Product Search</h2>
+
+  <!-- 🔒 Require Login -->
+  <div *ngIf="!isLoggedIn" style="color: red; margin-bottom: 15px;">
+    🔒 You must be logged in to use the search functionality.
+  </div>
+
+  <!-- 🔍 Search Form -->
+  <div *ngIf="isLoggedIn">
+    <!-- 🔍 Search Box -->
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Search for a product..."
+      style="width: 300px; margin-right: 10px;"
+    />
+
+    <!-- 🔢 Search Depth Selector -->
+    <label style="margin-right: 6px;">Pages:</label>
+    <select [(ngModel)]="searchDepth" style="margin-right: 10px;">
+      <option *ngFor="let d of searchDepthOptions" [ngValue]="d">{{ d }}</option>
+    </select>
+
+    <button (click)="onSearch()">Search</button>
+
+    <!-- 🔄 Loading Indicator -->
+    <div *ngIf="loading" style="margin-top: 10px;">
+      Loading search results...
+    </div>
+
+    <!-- ❌ Error Message -->
+    <div *ngIf="error" style="color: red; margin-top: 10px;">
+      {{ error }}
+    </div>
+
+    <!-- ✅ Search Results -->
+    <div *ngIf="results.length > 0" style="margin-top: 20px;">
+      <h3>Results:</h3>
+      <ul>
+        <li *ngFor="let product of results" style="margin-bottom: 10px;">
+          <strong>{{ product.title }}</strong><br />
+          Price: {{ product.price || 'N/A' }}<br />
+          Rating: {{ product.rating || 'N/A' }}<br />
+          Reviews: {{ product.reviews || 'N/A' }}<br />
+          Availability: {{ product.availability || 'N/A' }}<br />
+          <a *ngIf="product.link" [href]="product.link" target="_blank">View on Amazon</a><br />
+          <button (click)="trackProduct(product)">Add to Tracked Products</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<div style="padding: 20px;">
+  <h2>Your Watchlists</h2>
+
+  <!-- ❌ Error Message -->
+  <div *ngIf="error" style="color: red;">{{ error }}</div>
+
+  <!-- 🔁 Global Scraping Toggle -->
+  <div *ngIf="scrapingEnabled !== null" style="margin-bottom: 20px;">
+    <strong>Scheduled Scraping:</strong>
+    <span [style.color]="scrapingEnabled ? 'green' : 'red'">
+      {{ scrapingEnabled ? 'Enabled ✅' : 'Disabled ❌' }}
+    </span>
+    <button (click)="toggleScrapingSetting()" style="margin-left: 10px;">
+      {{ scrapingEnabled ? 'Disable' : 'Enable' }}
+    </button>
+  </div>
+
+  <!-- ➕ Create New Watchlist -->
+  <div style="margin-bottom: 20px;">
+    <label for="newWatchlist"><strong>New Watchlist Name:</strong></label>
+    <input
+      id="newWatchlist"
+      type="text"
+      [(ngModel)]="newWatchlistName"
+      placeholder="Enter name..."
+      style="margin-left: 10px;"
+    />
+    <button (click)="createWatchlist()">Create</button>
+  </div>
+
+  <!-- 📋 List of Watchlists -->
+  <div *ngIf="watchlists.length > 0; else noWatchlists">
+    <ul style="list-style-type: none; padding: 0;">
+      <li
+        *ngFor="let wl of watchlists"
+        style="margin-bottom: 25px; border-bottom: 1px solid #ccc; padding-bottom: 15px;"
+      >
+        <!-- 🔁 Rename or Display Name -->
+        <div *ngIf="!renameStates[wl.id]">
+          <span style="font-weight: bold;">📁 Watchlist:</span> {{ wl.name }}
+          <button (click)="renameStates[wl.id] = true">Rename</button>
+          <button (click)="deleteWatchlist(wl.id)">Delete</button>
+        </div>
+
+        <div *ngIf="renameStates[wl.id]" style="margin-top: 5px;">
+          <input
+            type="text"
+            [(ngModel)]="newNames[wl.id]"
+            placeholder="New name"
+            style="margin-right: 10px;"
+          />
+          <button (click)="renameWatchlist(wl.id)">Save</button>
+          <button (click)="renameStates[wl.id] = false">Cancel</button>
+        </div>
+
+        <!-- 🧾 Products in Watchlist -->
+        <div
+          *ngIf="wl.products && wl.products.length > 0"
+          style="margin-top: 10px; margin-left: 20px;"
+        >
+          <ul style="padding-left: 0; list-style-type: none;">
+            <li *ngFor="let product of wl.products" style="margin-bottom: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="flex: 1;">- {{ product.title }}</span>
+                <button (click)="scrapeProduct(product.id)">
+                  🔁 Refresh
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          *ngIf="!wl.products || wl.products.length === 0"
+          style="margin-left: 20px; font-style: italic; color: gray;"
+        >
+          (No products in this watchlist)
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 🚫 No Watchlists Fallback -->
+  <ng-template #noWatchlists>
+    <p>No watchlists found. Create one above.</p>
+  </ng-template>
+</div>

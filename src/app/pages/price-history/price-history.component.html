@@ -1,0 +1,90 @@
+<div style="padding: 20px;">
+  <h2>📈 View Price History</h2>
+
+  <!-- ❌ Error Message -->
+  <div *ngIf="error" style="color: red; margin-bottom: 15px;">
+    {{ error }}
+  </div>
+
+  <!-- 🛒 Product Selector -->
+  <label for="productSelect"><strong>Select a product:</strong></label>
+  <select
+    id="productSelect"
+    [(ngModel)]="selectedProductId"
+    (change)="fetchPriceHistory()"
+    style="margin-left: 10px;"
+  >
+    <option
+      *ngFor="let product of productsWithHistory"
+      [ngValue]="product.id"
+      [ngStyle]="{ color: product.id?.startsWith('snapshot:') ? 'gray' : 'black' }"
+    >
+      {{ product.title }}
+    </option>
+  </select>
+
+  <!-- 📅 Filter Range Selector -->
+  <div *ngIf="selectedProductId" style="margin-top: 15px;">
+    <label for="dateRangeSelect"><strong>Filter by date range:</strong></label>
+    <select
+      id="dateRangeSelect"
+      [(ngModel)]="selectedRangeDays"
+      (change)="onRangeChange()"
+      style="margin-left: 10px;"
+    >
+      <option *ngFor="let opt of dateOptions" [ngValue]="opt.value">
+        {{ opt.label }}
+      </option>
+    </select>
+  </div>
+
+  <!-- 🆕 Sale Event Filter -->
+  <div *ngIf="selectedProductId && saleEvents.length > 0" style="margin-top: 15px;">
+    <label for="eventSelect"><strong>Filter by sale event:</strong></label>
+    <select
+      id="eventSelect"
+      [(ngModel)]="selectedEvent"
+      (change)="onEventChange()"
+      style="margin-left: 10px;"
+    >
+      <option [ngValue]="''">(All Events)</option>
+      <option *ngFor="let event of saleEvents" [ngValue]="event.trim()">
+        {{ event.trim() }}
+      </option>
+    </select>
+  </div>
+
+  <!-- 📄 Price History Table -->
+  <div *ngIf="priceHistory.length > 0" style="margin-top: 30px;">
+    <h3>🛍️ {{ productTitle }}</h3>
+    <p *ngIf="targetPrice !== null">
+      🎯 Target Price: <strong>${{ targetPrice.toFixed(2) }}</strong>
+    </p>
+
+    <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; margin-top: 10px;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Price</th>
+          <th>Availability</th>
+          <th>Sale Event</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of priceHistory">
+          <td>{{ entry.date_recorded | date: 'short':'UTC' }}</td>
+          <td [ngStyle]="{ color: targetPrice && entry.price_numeric < targetPrice ? 'green' : 'black' }">
+            ${{ entry.price_numeric.toFixed(2) }}
+          </td>
+          <td>{{ entry.availability || 'N/A' }}</td>
+          <td>{{ entry.event_name || '—' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 🚫 No History Message -->
+  <p *ngIf="priceHistory.length === 0 && productTitle && !error" style="margin-top: 20px;">
+    No price history available for this product.
+  </p>
+</div>

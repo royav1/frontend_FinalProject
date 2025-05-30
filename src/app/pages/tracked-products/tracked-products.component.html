@@ -1,0 +1,76 @@
+<div style="padding: 20px;">
+  <h2>Hello {{ username || 'Guest' }}, here are your Tracked Products:</h2>
+
+  <div *ngIf="error" style="color: red;">{{ error }}</div>
+
+  <!-- 🛒 Tracked Products (always visible) -->
+  <h3 style="margin-top: 20px;">Tracked Products</h3>
+  <div *ngIf="trackedProducts.length === 0">No tracked products found.</div>
+  <ul *ngIf="trackedProducts.length > 0" style="list-style-type: none; padding: 0;">
+    <li *ngFor="let product of trackedProducts" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <div
+        style="flex: 1; padding-right: 10px;"
+        [ngStyle]="{
+          color: ('' + product.id).startsWith('snapshot:') ? 'gray' : 'black',
+          fontStyle: ('' + product.id).startsWith('snapshot:') ? 'italic' : 'normal'
+        }"
+      >
+        {{ product.title }},
+        Price: {{ product.price || 'N/A' }},
+        Rating: {{ product.rating || 'N/A' }},
+        Reviews: {{ product.reviews || 'N/A' }}
+      </div>
+
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input
+          type="number"
+          [(ngModel)]="product.target_price"
+          placeholder="Target Price"
+          min="0"
+          style="width: 110px; padding: 3px;"
+          [disabled]="('' + product.id).startsWith('snapshot:')"
+        />
+        <button (click)="setTargetPrice(product)" [disabled]="('' + product.id).startsWith('snapshot:')">Set Target</button>
+        <button (click)="addProductToWatchlist(product.id)" [disabled]="('' + product.id).startsWith('snapshot:')">Add</button>
+        <button (click)="deleteTrackedProduct(product.id)" [disabled]="('' + product.id).startsWith('snapshot:')">🗑️ Delete</button>
+      </div>
+    </li>
+  </ul>
+
+  <!-- 🔽 Watchlist Selector and Section (optional) -->
+  <div *ngIf="watchlists.length > 0">
+    <label for="watchlistSelect"><strong>Select a watchlist:</strong></label>
+    <select id="watchlistSelect" [(ngModel)]="selectedWatchlistId">
+      <option *ngFor="let wl of watchlists" [ngValue]="wl.id">{{ wl.name }}</option>
+    </select>
+
+    <!-- 📋 Watchlist Products -->
+    <div *ngIf="selectedWatchlistId !== null">
+      <h3 style="margin-top: 30px;">
+        Products in "{{ getSelectedWatchlistName() }}"
+      </h3>
+      <div *ngIf="getSelectedProducts().length > 0; else noProductsInWatchlist">
+        <ul style="list-style-type: none; padding: 0;">
+          <li *ngFor="let product of getSelectedProducts()" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="flex: 1;">
+              {{ product.title }},
+              Price: {{ product.price || 'N/A' }},
+              Rating: {{ product.rating || 'N/A' }},
+              Reviews: {{ product.reviews || 'N/A' }},
+              Target: {{ product.target_price || 'N/A' }}
+            </div>
+            <button (click)="removeProductFromWatchlist(product.id)">Remove</button>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noProductsInWatchlist>
+        <p>No products in this watchlist.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- 🚫 No Watchlists -->
+  <div *ngIf="watchlists.length === 0">
+    <p>No watchlists found.</p>
+  </div>
+</div>

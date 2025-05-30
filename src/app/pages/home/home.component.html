@@ -1,0 +1,53 @@
+<div style="padding: 20px;">
+  <h2>Welcome {{ username }}!</h2>
+
+  <p *ngIf="username === 'Guest'">
+    This app allows you to track Amazon product prices, create watchlists, view price history, and get alerts when prices drop.
+    To use the full features, please <a routerLink="/login">log in</a> or <a routerLink="/register">register</a>.
+  </p>
+
+  <p>You can:</p>
+  <ul>
+    <li>Search for Amazon products (with adjustable depth).</li>
+    <li>Track products and set personal target prices.</li>
+    <li>Group tracked products into watchlists.</li>
+    <li>Enable automatic daily scraping.</li>
+    <li>View historical prices for tracked products.</li>
+  </ul>
+
+  <!-- 🔍 SEARCH -->
+  <h4>🔍 Search</h4>
+  <button type="button" (click)="showSearchDetails = !showSearchDetails">
+    {{ showSearchDetails ? 'Hide details ▲' : 'Show more ▼' }}
+  </button>
+  <p *ngIf="showSearchDetails" style="margin-top: 10px;">
+    Search Amazon products by name and control how many pages (1–10) to scan. Results are shown immediately. You must be logged in to track products from the results.
+  </p>
+
+  <!-- 📦 TRACKED PRODUCTS -->
+  <h4 style="margin-top: 25px;">📦 Tracked Products</h4>
+  <button type="button" (click)="showTrackedDetails = !showTrackedDetails">
+    {{ showTrackedDetails ? 'Hide details ▲' : 'Show more ▼' }}
+  </button>
+  <p *ngIf="showTrackedDetails" style="margin-top: 10px;">
+    View and manage all your tracked items. You can set a target price or assign products to watchlists. Tracked items can also be deleted when no longer relevant.
+  </p>
+
+  <!-- 📁 WATCHLISTS -->
+  <h4 style="margin-top: 25px;">📁 Watchlists</h4>
+  <button type="button" (click)="showWatchlistDetails = !showWatchlistDetails">
+    {{ showWatchlistDetails ? 'Hide details ▲' : 'Show more ▼' }}
+  </button>
+  <p *ngIf="showWatchlistDetails" style="margin-top: 10px;">
+    Organize tracked products into custom lists. You can rename, delete, or manually refresh product data. You can also toggle automated scraping globally.
+  </p>
+
+  <!-- 📈 PRICE HISTORY -->
+  <h4 style="margin-top: 25px;">📈 Price History</h4>
+  <button type="button" (click)="showHistoryDetails = !showHistoryDetails">
+    {{ showHistoryDetails ? 'Hide details ▲' : 'Show more ▼' }}
+  </button>
+  <p *ngIf="showHistoryDetails" style="margin-top: 10px;">
+    Select a product to view its price changes over time. You can filter by date range or sale event. Even deleted products retain their price history as snapshots.
+  </p>
+</div>
