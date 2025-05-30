@@ -1,3 +1,8 @@
+## Docker Image (Prebuilt)
+You can pull and run the prebuilt Docker image for this frontend:
+docker pull r300887882/amazon-tracker-frontend:latest
+
+
 # 🧩 Amazon Price Tracker (Frontend - Angular)
 ### This is the Angular frontend for the Amazon Price Tracker app. It provides an intuitive interface for searching Amazon products, tracking prices, organizing watchlists, and viewing price history with built-in notification support.
 
