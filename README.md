@@ -1,6 +1,6 @@
 ## Docker Image (Prebuilt)
 You can pull and run the prebuilt Docker image for this frontend:
-docker pull r300887882/amazon-tracker-frontend:latest
+docker pull royav1/amazon-tracker-frontend:latest
 
 
 # 🧩 Amazon Price Tracker (Frontend - Angular)
